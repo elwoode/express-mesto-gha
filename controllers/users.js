@@ -28,10 +28,7 @@ const getUser = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
-  if (!name || !about || !avatar) {
-    return res.status(400).send({ message: 'Переданы некорректные данные' });
-  }
-  User.create({ name, about, avatar })
+  return User.create({ name, about, avatar })
     .then((user) => {
       res.status(201).send(user)
         .catch((err) => {
