@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 
-
-mongoose.connect('mongodb://localhost:27017/mestodb')
+mongoose.connect('mongodb://localhost:27017/mestodb');
 const app = express();
 
 const { PORT = 3000 } = process.env;

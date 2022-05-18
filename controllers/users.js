@@ -1,21 +1,21 @@
-const User = require('../models/User')
+const User = require('../models/User');
 
 const getUsers = (_, res) => {
   User.find({})
-    .then(users => {
-      res.status(200).send(users)
+    .then((users) => {
+      res.status(200).send(users);
     })
     .catch(() => {
-      res.status(500).send({ message: 'Ошибка сервера' })
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
-}
+};
 
 const getUser = (req, res) => {
-  const id = req.params.id
+  const { id } = req.params;
   return User.findById(id)
     .orFail(() => new Error('NotFound'))
-    .then(user => res.status(200).send(user))
-    .catch(err => {
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные' });
       } else if (err.message === 'NotFound') {
@@ -32,17 +32,18 @@ const createUser = (req, res) => {
     return res.status(400).send({ message: 'Переданы некорректные данные' });
   }
   User.create({ name, about, avatar })
-    .then(user => {
+    .then((user) => {
       res.status(201).send(user)
-        .catch(err => {
+        .catch((err) => {
           if (err.name === 'ValidationError' || err.name === 'CastError') {
             res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
           } else {
             res.status(500).send({ message: 'На сервере произошла ошибка' });
           }
-        })
-    })
-}
+        });
+    });
+};
+
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   return User.findByIdAndUpdate(
@@ -50,8 +51,8 @@ const updateProfile = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   ).orFail(() => new Error('NotFound'))
-    .then(user => res.status(200).send(user))
-    .catch(err => {
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля' });
       } else if (err.message === 'NotFound') {

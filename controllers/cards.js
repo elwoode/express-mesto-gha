@@ -1,9 +1,8 @@
 const Cards = require('../models/card');
 
-
 const getCards = (req, res) => {
   Cards.find({})
-    .then(cards => res.status(200).send(cards))
+    .then((cards) => res.status(200).send(cards))
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
@@ -12,8 +11,8 @@ const createCard = (req, res) => {
   const owner = req.user._id;
 
   return Cards.create({ name, link, owner })
-    .then(card => res.status(200).send(card))
-    .catch(err => {
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при создании карточки' });
       } else {
@@ -27,8 +26,8 @@ const deleteCard = (req, res) => {
 
   return Cards.findByIdAndRemove(cardId)
     .orFail(() => new Error('NotFound'))
-    .then(card => res.status(200).send(card))
-    .catch(err => {
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные' });
       } else if (err.message === 'NotFound') {
@@ -45,8 +44,8 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   ).orFail(() => new Error('NotFound'))
-    .then(card => res.status(200).send(card))
-    .catch(err => {
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' });
       } else if (err.message === 'NotFound') {
@@ -63,8 +62,8 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   ).orFail(() => new Error('NotFound'))
-    .then(card => res.status(200).send(card))
-    .catch(err => {
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка' });
       } else if (err.message === 'NotFound') {
