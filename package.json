@@ -4,7 +4,7 @@
   "description": "Бэкенд проекта Место. Учебный проект Яндекс.Практикума",
   "main": "app.js",
   "scripts": {
-    "lint": "npx eslint . ",
+    "lint": "npx eslint . --fix",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -26,9 +26,12 @@
     "nodemon": "^2.0.16"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "mongoose": "^6.3.3"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.3",
+    "validator": "^13.7.0"
   }
 }
