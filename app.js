@@ -1,29 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+const { createUser, login } = require('./controllers/users');
+const {
+  validationCreateUser,
+  validationLogin,
+} = require('./middlewares/validations');
+const auth = require('./middlewares/auth');
+const handelError = require('./middlewares/handelError');
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
-const app = express();
-
 const { PORT = 3000 } = process.env;
+const app = express();
 
 app.use(express.json());
 
-app.use((req, _, next) => {
-  req.user = {
-    _id: '6283b1da218a9b1b2dad0d75',
-  };
+app.post('/signin', validationLogin, login);
+app.post('/signup', validationCreateUser, createUser);
 
-  next();
-});
-
+app.use(auth);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
-
-app.use((_, res) => {
-  res.status(404).send({ message: 'Страница с таким url не найдена' });
-});
+app.use(errors());
+app.use(handelError);
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.listen(PORT, () => {
   console.log(`Запуск сервера ${PORT}`);
