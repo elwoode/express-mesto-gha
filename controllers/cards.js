@@ -1,15 +1,12 @@
 const Cards = require('../models/Card');
-const BadRequest = require('../errors/BadRequest');
-const NotFound = require('../errors/NotFoundError');
-const ForbiddenError = require('../errors/ForbiddenError');
 
-const getCards = (req, res, next) => {
+const getCards = (req, res) => {
   Cards.find({})
     .then((cards) => res.status(200).send(cards))
-    .catch(next);
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
-const createCard = (req, res, next) => {
+const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
@@ -17,66 +14,63 @@ const createCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при создании карточки');
+        res.status(400).send({ message: 'Переданы некорректные данные при создании карточки' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
-    })
-    .catch(next);
+    });
 };
 
-const deleteCard = (req, res, next) => {
+const deleteCard = (req, res) => {
   const { cardId } = req.params;
 
-  return Cards.findById(cardId)
-    .orFail(() => {
-      throw new NotFound('Карточка с указанным _id не найдена');
-    })
-    .then((card) => {
-      if (card.owner.toString() === req.user._id) {
-        Cards.findByIdAndRemove(cardId).then(() => res.status(200).send(card));
+  return Cards.findByIdAndRemove(cardId)
+    .orFail(() => new Error('NotFound'))
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else if (err.message === 'NotFound') {
+        res.status(404).send({ message: 'Карточка с указанным _id не найдена' });
       } else {
-        throw new ForbiddenError('В доступе отказано');
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
-    })
-    .catch(next);
+    });
 };
 
-const likeCard = (req, res, next) => {
+const likeCard = (req, res) => {
   Cards.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
-  ).orFail(() => {
-    throw new NotFound('Передан несуществующий _id карточки');
-  })
+  ).orFail(() => new Error('NotFound'))
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные для постановки лайка'));
+        res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' });
+      } else if (err.message === 'NotFound') {
+        res.status(404).send({ message: 'Передан несуществующий _id карточки' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
-      if (err.message === 'NotFound') {
-        next(new NotFound('Передан несуществующий _id карточки'));
-      }
-      next(err);
     });
 };
 
-const dislikeCard = (req, res, next) => {
+const dislikeCard = (req, res) => {
   Cards.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
-  ).orFail(() => {
-    throw new NotFound('Передан несуществующий _id карточки');
-  })
+  ).orFail(() => new Error('NotFound'))
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные для снятия лайка'));
+        res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка' });
+      } else if (err.message === 'NotFound') {
+        res.status(404).send({ message: 'Передан несуществующий _id карточки' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
-      if (err.message === 'NotFound') {
-        next(new NotFound('Передан несуществующий _id карточки'));
-      }
-      next(err);
     });
 };
 
