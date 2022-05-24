@@ -4,7 +4,7 @@
   "description": "Бэкенд проекта Место. Учебный проект Яндекс.Практикума",
   "main": "app.js",
   "scripts": {
-    "lint": "npx eslint . ",
+    "lint": "npx eslint . --fix",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },

@@ -1,9 +1,10 @@
-const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 const NotFound = require('../errors/NotFoundError');
 const BadRequest = require('../errors/BadRequest');
 const ConflictError = require('../errors/ConflictError');
+const AuthError = require('../errors/AuthError');
 
 const getUsers = (_, res, next) => {
   User.find({})
@@ -75,10 +76,10 @@ const updateUser = (req, res, next) => {
       } else {
         next(err);
       }
-    })
+    });
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   return User.findByIdAndUpdate(
@@ -95,7 +96,7 @@ const updateAvatar = (req, res) => {
       } else {
         next(err);
       }
-    })
+    });
 };
 
 const getCurrentUser = (req, res, next) => {
