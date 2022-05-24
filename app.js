@@ -13,7 +13,7 @@ const { cardRouter } = require('./routes/cards');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-
+mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(express.json());
 
 app.post('/signin', validationLogin, login);
@@ -24,8 +24,6 @@ app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 app.use(errors());
 app.use(handelError);
-mongoose.connect('mongodb://localhost:27017/mestodb');
-
 app.listen(PORT, () => {
   console.log(`Запуск сервера ${PORT}`);
 });
