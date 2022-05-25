@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default: 'Исследователь океана',
+    default: 'Исследователь',
 
   },
   avatar: {
@@ -44,6 +44,8 @@ const userSchema = new mongoose.Schema({
 
     },
   },
+}, {
+  versionKey: false,
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
