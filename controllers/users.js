@@ -34,18 +34,11 @@ const getUser = (req, res, next) => {
 const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
-      email: req.body.email,
-      password: hash,
-      name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
+      name: req.body.name, about: req.body.about, avatar: req.body.avatar, email: req.body.email, password: hash,
     }))
     .then((user) => {
-      res.status(200).send({
-        email: user.email,
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
+      res.status(201).send({
+        name: user.name, about: user.about, avatar: user.avatar, email: user.email,
       });
     })
     .catch((err) => {
