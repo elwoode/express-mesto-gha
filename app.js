@@ -8,6 +8,7 @@ const {
 } = require('./middlewares/validations');
 const auth = require('./middlewares/auth');
 const handelError = require('./middlewares/handelError');
+const NotFoundError = require('./errors/NotFoundError');
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 
