@@ -10,12 +10,14 @@ const userSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 30,
     default: 'Жак-Ив Кусто',
+
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 30,
     default: 'Исследователь океана',
+
   },
   avatar: {
     type: String,
@@ -23,6 +25,7 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: (url) => isUrl(url),
       message: 'Некорректный адрес URL',
+
     },
   },
   email: {
@@ -37,8 +40,9 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    unique: true,
     select: false,
-    minlength: 4,
+    minlength: 8,
   },
 });
 
