@@ -1,11 +1,11 @@
 [![Tests](https://github.com/elwoode/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/elwoode/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/elwoode/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/elwoode/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+# Бэкенд проекта Место
 ### *Учебный проект от [Яндекс.Практикум](https://practicum.yandex.ru/web/)*
 
 ## Описание проекта
 Место - это интерактивная страница, на которой пользователи могут делиться фотографиями, удалять их и ставить лайки. 
 
-Данный учебный проект создан в рамках прохождения 13 спринта курса Веб-разработчик. Цель проекта закрепить на практике пройденный учебный материал, в который входят:
+Данный учебный проект создан в рамках прохождения 13-14 спринтов курса Веб-разработчик. Цель проекта закрепить на практике пройденный учебный материал, в который входят:
 
 - Взаимодействие с Express и MongoDB;
 - Описания схем и моделей;
